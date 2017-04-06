@@ -1,17 +1,14 @@
-f <- function(FUN, start0, start, TOL = 1E-6, MAX.ITER = 100, echo = FALSE)
+f <- function(FUN, FUNp, start, TOL = 1E-6, MAX.ITER = 100, echo = FALSE)
 {
   x <- start
-  w <- start0
   
   if (echo)
   {
     expr <- expression(print(xt <- x))
-    expr2 <- expression(wt <- w)
   }
   else
   {
     expr <- expression(xt <- x)
-    expr2 <- expression(wt <- w)
   }
   
   i <- 0
@@ -19,10 +16,8 @@ f <- function(FUN, start0, start, TOL = 1E-6, MAX.ITER = 100, echo = FALSE)
   repeat
   {
     eval(expr)
-    eval(expr2)
     
-    x <- xt - FUN(xt)*(xt-wt)/(FUN(xt)-FUN(wt))
-    w <- xt
+    x <- xt - FUN(xt)/FUNp(xt)
     
     if (abs(x - xt)/abs(x) < TOL)
       break
