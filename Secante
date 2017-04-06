@@ -1,0 +1,33 @@
+f <- function(FUN, start0, start, TOL = 1E-6, MAX.ITER = 100, echo = FALSE)
+{
+  x <- start
+  w <- start0
+  
+  if (echo)
+  {
+    expr <- expression(print(xt <- x))
+    expr2 <- expression(wt <- w)
+  }
+  else
+  {
+    expr <- expression(xt <- x)
+    expr2 <- expression(wt <- w)
+  }
+  
+  i <- 0
+  
+  repeat
+  {
+    eval(expr)
+    eval(expr2)
+    
+    x <- xt - FUN(xt)*(xt-wt)/(FUN(xt)-FUN(wt))
+    w <- xt
+    
+    if (abs(x - xt)/abs(x) < TOL)
+      break
+    if (MAX.ITER < (i <- i + 1))
+      stop('Maximum number of iterations reached without convergence')
+  }
+  list(root = x, nb.iter = i)
+}
